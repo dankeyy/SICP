@@ -1,5 +1,9 @@
-;; ex 1.1
+;; Chapter 1, Building Abstractions with Procedures
 
+
+;; Part 1.1 - The Elements of programming
+
+;; ex 1.1
 10 ;; 10
 
 (+ 5 3 4) ;; 12
@@ -101,8 +105,10 @@
 
 ;; ex 1.6 - square-iter by Alyssa's new-if implementation
 (define (new-if predicate then-clause else-clause)
-  (cond (predicate then-clause)
-  (else else-clause)))
+  (cond (predicate
+      then-clause)
+  (else
+      else-clause)))
 
 (define (new-sqrt-iter guess x)
   (new-if (good-enough? guess x)
@@ -114,3 +120,30 @@
 ;; the `if` clause short circuits meaning only one operand will be evaluated.
 ;; in Alyssa's implementation (if of course the interpreter uses applicative-order evaluation),
 ;; the program will not stop evaluating the third argument causing the program to infinitly evaluate the third argument.
+
+
+;; ex 1.7
+;; problems with current impl;
+;; if numbers are small, tolerence of 0.01 is too big (causing a large margin of error)
+;; if numbers are big, machine precision is unable to represent the difference.
+;;    The best guess will not be within 0.01 to the root hence the program will not terminate
+;; solution??
+;; So obviously our implementation of good-enough is not sufficient
+;; A very simple solution would be to just keep iterating
+;; until the guesses don't change anymore, hence we've arrived at the best solution possible.
+(define (good-enough? guess x)
+  (= guess (improve guess x)))
+
+;; ex 1.8
+(define (improve-cube guess x)
+  (/
+   (+ (* 2 guess) (/ x (square guess)))
+    3))
+
+(define (cube-root-iter guess x)
+  (if (good-enough? guess x)
+    guess
+    (cube-root-iter (improve guess x) x)))
+
+(define (cube-root x)
+  (cube-root-iter 1.0 x))
