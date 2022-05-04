@@ -147,3 +147,48 @@
 
 (define (cube-root x)
   (cube-root-iter 1.0 x))
+
+
+;; ex 1.9
+(define (+ a b)
+  (if (= a 0) b (inc (+ (dec a) b))))
+(define (+ a b)
+  (if (= a 0) b (+ (dec a) (inc b))))
+;; first expression is a recursive process, second is iterative.
+;; without writing out the thunks we could simply observe that
+;; the recursive call in the first process is nested within the calculation.
+;; while in the second process it only occures after computation is complete.
+
+
+;; ex 1.10 - Ackermann’s function
+(define (A x y)
+  (cond ((= y 0) 0)
+    ((= x 0) (* 2 y))
+    ((= y 1) 2)
+    (else (A (- x 1) (A x (- y 1))))))
+
+(define (f n) (A 0 n))   ;; f(n): 2 * n
+(define (g n) (A 1 n))   ;; g(n): if n = 0 then 0 else 2 ^ n forall. n > 0
+(define (h n) (A 2 n))   ;; h(n): if n = 0 then 0 else 2 for n = 1 else 2 ^ 2 ^ (2 .. n times)
+
+
+;; ex 1.11
+(define (f-rec n)
+  (if (< n 3)
+    n
+    (+      (f (- n 1))
+       (* 2 (f (- n 2)))
+       (* 3 (f (- n 3))))))
+
+
+(define (f-iter n)
+  (define (iter a b c n)
+    (if (< n 3)
+      a
+      (iter
+          (+ a (* 2 b) (* 3 c))
+          a
+          b
+          (- n 1))))
+
+  (iter 2 1 0 n))
